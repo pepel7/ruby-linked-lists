@@ -7,6 +7,8 @@ class LinkedList
   end
 
   def append(value)
+    return prepend(value) if size.zero?
+
     temp = head
     temp = temp.next_node until temp.next_node.nil?
     temp.next_node = Node.new(value)
@@ -24,12 +26,16 @@ class LinkedList
   end
 
   def tail
+    return nil if size.zero?
+
     temp = head
     temp = temp.next_node until temp.next_node.nil?
     temp
   end
 
   def at(index)
+    return nil if index >= size
+
     temp = head
     index.times do
       temp = temp.next_node
@@ -38,6 +44,8 @@ class LinkedList
   end
 
   def pop
+    return 'error: the list is empty' if size.zero?
+
     temp = head
     temp = temp.next_node until temp.next_node.next_node.nil?
     popped = temp.next_node
@@ -76,6 +84,34 @@ class LinkedList
     string + 'nil'
   end
 
+  def insert_at(value, index)
+    return 'error: the list is shorter than the given index' if index > size
+    return prepend(value) if index.zero?
+    return append(value) if index == size
+
+    temp = head
+    (index - 1).times do
+      temp = temp.next_node
+    end
+    rest = temp.next_node
+    temp.next_node = Node.new(value, rest)
+    self
+  end
+
+  def remove_at(index)
+    return 'error: the list is shorter than the given index' if index >= size
+    return 'error: there is nothing to remove in the list' if size.zero?
+    return pop(index) if index == size - 1
+
+    temp = head
+    (index - 1).times do
+      temp = temp.next_node
+    end
+    rest = temp.next_node.next_node
+    temp.next_node = rest
+    self
+  end
+
   private
 
   attr_writer :head
@@ -89,6 +125,3 @@ class Node
     @next_node = next_node
   end
 end
-
-p test_list = LinkedList.new
-puts test_list
