@@ -9,17 +9,15 @@ class LinkedList
   def append(value)
     return prepend(value) if size.zero?
 
-    temp = head
-    temp = temp.next_node until temp.next_node.nil?
-    temp.next_node = Node.new(value)
+    tail.next_node = Node.new(value)
     self
   end
 
   def size
-    temp = head
+    cursor = head
     count = 0
-    until temp.nil?
-      temp = temp.next_node
+    until cursor.nil?
+      cursor = cursor.next_node
       count += 1
     end
     count
@@ -28,58 +26,58 @@ class LinkedList
   def tail
     return nil if size.zero?
 
-    temp = head
-    temp = temp.next_node until temp.next_node.nil?
-    temp
+    cursor = head
+    cursor = cursor.next_node until cursor.next_node.nil?
+    cursor
   end
 
   def at(index)
     return nil if index >= size
 
-    temp = head
+    cursor = head
     index.times do
-      temp = temp.next_node
+      cursor = cursor.next_node
     end
-    temp.value
+    cursor
   end
 
   def pop
     return 'error: the list is empty' if size.zero?
 
-    temp = head
-    temp = temp.next_node until temp.next_node.next_node.nil?
-    popped = temp.next_node
-    temp.next_node = nil
+    cursor = head
+    cursor = cursor.next_node until cursor.next_node.next_node.nil?
+    popped = cursor.next_node
+    cursor.next_node = nil
     popped
   end
 
   def contains?(value)
-    temp = head
-    until temp.nil?
-      return true if temp.value == value
+    cursor = head
+    until cursor.nil?
+      return true if cursor.value == value
 
-      temp = temp.next_node
+      cursor = cursor.next_node
     end
     false
   end
 
   def find(value)
-    temp = head
+    cursor = head
     index = 0
-    until temp.nil?
-      return index if temp.value == value
+    until cursor.nil?
+      return index if cursor.value == value
 
-      temp = temp.next_node
+      cursor = cursor.next_node
       index += 1
     end
   end
 
   def to_s
-    temp = head
+    cursor = head
     string = ''
-    until temp.nil?
-      string += "( #{temp.value} ) -> "
-      temp = temp.next_node
+    until cursor.nil?
+      string += "( #{cursor.value} ) -> "
+      cursor = cursor.next_node
     end
     string + 'nil'
   end
@@ -89,12 +87,12 @@ class LinkedList
     return prepend(value) if index.zero?
     return append(value) if index == size
 
-    temp = head
+    cursor = head
     (index - 1).times do
-      temp = temp.next_node
+      cursor = cursor.next_node
     end
-    rest = temp.next_node
-    temp.next_node = Node.new(value, rest)
+    rest = cursor.next_node
+    cursor.next_node = Node.new(value, rest)
     self
   end
 
@@ -103,18 +101,14 @@ class LinkedList
     return 'error: there is nothing to remove in the list' if size.zero?
     return pop(index) if index == size - 1
 
-    temp = head
+    cursor = head
     (index - 1).times do
-      temp = temp.next_node
+      cursor = cursor.next_node
     end
-    rest = temp.next_node.next_node
-    temp.next_node = rest
+    rest = cursor.next_node.next_node
+    cursor.next_node = rest
     self
   end
-
-  private
-
-  attr_writer :head
 end
 
 class Node
